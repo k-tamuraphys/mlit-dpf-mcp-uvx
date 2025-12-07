@@ -21,3 +21,6 @@ dependencies = [
 
 [project.scripts]
 mlit-dpf-mcp = "src.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
