@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "mlit-dpf-mcp"
 version = "0.1.0"
@@ -9,16 +13,11 @@ license = { text = "MIT License" }
 dependencies = [
   "aiohttp>=3.9",
   "pydantic>=2.7",
-  "tenacity>=8.2",            # retry backoff (optional)
-  "python-json-logger>=2.0",  # log 
-  "mcp>=1.2",                 # SDK MCP (server)
-  "typer>=0.12",              # (optional) CLI 
+  "tenacity>=8.2",
+  "python-json-logger>=2.0",
+  "mcp>=1.2",
   "python-dotenv>=1.0"
 ]
 
 [project.scripts]
 mlit-dpf-mcp = "src.server:main"
-
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
-addopts = "-q"
