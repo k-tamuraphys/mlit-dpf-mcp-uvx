@@ -1505,5 +1505,9 @@ async def _main() -> None:
         await server.run(read, write, init_opts)
 
 
-if __name__ == "__main__":
+def main():
     anyio.run(_main)
+
+
+if __name__ == "__main__":
+    main()
