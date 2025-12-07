@@ -47,14 +47,14 @@
 
 * OS：Windows 10 / 11 または macOS 13以降
 * MCPホスト：Claude Desktopなど
-* MCPサーバー実行環境：Python 3.10+
+* MCPサーバー実行環境：[uv](https://docs.astral.sh/uv/)
 * メモリ：8GB以上推奨
 * ストレージ：空き容量 1GB以上（キャッシュやログを含む）
 
 ## 4. インストールとセットアップ
 
 ### 前提条件
-Claude DesktopなどのMCP対応AIアプリケーション および Python がインストールされていることを前提としています。以下は、Claude Desktopでの利用を想定した手順です。
+Claude DesktopなどのMCP対応AIアプリケーション および [uv](https://docs.astral.sh/uv/) がインストールされていることを前提としています。以下は、Claude Desktopでの利用を想定した手順です。
 
 ### 手順
 
@@ -62,83 +62,36 @@ Claude DesktopなどのMCP対応AIアプリケーション および Python が�
    
    詳しい手順は、[こちら](https://www.mlit-data.jp/api_docs/usage/introduction.html)をご覧ください。
 
-2. **リポジトリをクローン**
-
-   ```bash
-   git clone https://github.com/MLIT-DATA-PLATFORM/mlit-dpf-mcp.git
-   cd mlit-dpf-mcp
-   ```
-
-3. **仮想環境を作成 & 有効化**
-
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate      # Windows
-   source .venv/bin/activate   # macOS/Linux
-   ```
-
-4. **依存ライブラリをインストール**
-
-   ```bash
-   pip install -e .
-   pip install aiohttp pydantic tenacity python-json-logger mcp python-dotenv
-   ```
-
-5. **環境変数を設定**
-
-   `.env.example`をコピーし、 `.env` ファイルを作成します：
-
-   ```
-   MLIT_API_KEY=your_api_key_here
-   MLIT_BASE_URL=https://www.mlit-data.jp/api/v1/
-   ```
-
-   あるいはコマンドラインから直接設定することも可能です：
-
-   ```bash
-   export MLIT_API_KEY=your_api_key_here
-   export MLIT_BASE_URL=https://www.mlit-data.jp/api/v1/
-   ```
-
-   `your_api_key_here`は必ず、手順1で取得したAPIキーに置き換えてください。
-
-6. **MCP サーバーの起動**
-
-   ```bash
-   python -m src.server
-   ```
-
-7. **Claude Desktopの設定ファイルを開く**
+2. **Claude Desktopの設定ファイルを開く**
 
    * **Windows：** `C:\Users\<ユーザー名>\AppData\Roaming\Claude\claude_desktop_config.json`
    * **macOS：** `~/Library/Application Support/Claude/claude_desktop_config.json`
    * Claude Desktopアプリの設定画面にある「開発者」メニューの「設定を編集」ボタンをクリックして`claude_desktop_config.json`を開くことも可能です。
 
-8. **MCPサーバーの構成を追加**
+3. **MCPサーバーの構成を追加**
 
    ```json
    {
      "mcpServers": {
        "mlit-dpf-mcp": {
-         "command": "......./mlit-dpf-mcp/.venv/Scripts/python.exe",
+         "command": "uvx",
          "args": [
-           "....../mlit-dpf-mcp/src/server.py"
+           "--from",
+           "git+https://github.com/k-tamuraphys/mlit-dpf-mcp-uvx.git",
+           "mlit-dpf-mcp"
          ],
          "env": {
            "MLIT_API_KEY": "your_api_key_here",
-           "MLIT_BASE_URL": "https://www.mlit-data.jp/api/v1/",
-           "PYTHONUNBUFFERED": "1",
-           "LOG_LEVEL": "WARNING"
+           "MLIT_BASE_URL": "https://www.mlit-data.jp/api/v1/"
          }
        }
      }
    }
    ```
 
-   `command`と`args`は必ず、実際のパスに変更してください。  
    `your_api_key_here`は必ず、手順1で取得したAPIキーに置き換えてください。
 
-9. **Claude Desktop を再起動**
+4. **Claude Desktop を再起動**
 
 
 ## 5. ディレクトリ構成
